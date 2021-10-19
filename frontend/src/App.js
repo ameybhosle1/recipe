@@ -9,6 +9,7 @@ import Profile from './Components/Profile';
 import OtherRecipes from './Components/OtherRecipes';
 import Logout from './Components/Logout';
 import ViewPost from './Components/ViewPost';
+import AddRecipe from './Components/AddRecipe';
 
 
 function App() {
@@ -19,6 +20,7 @@ function App() {
         <PublicRoute exact path="/login" component={Login} />
         <PrivateRoute exact path="/profile" component={Profile} />
         <PrivateRoute exact path="/view/:id" component={ViewPost} />
+        <PrivateRoute exact path="/add-recipe" component={AddRecipe} />
         <PublicRoute exact path="/:profile/recipes" component={OtherRecipes} />
         <PrivateRoute exact path="/logout" component={Logout} />
       </Switch>

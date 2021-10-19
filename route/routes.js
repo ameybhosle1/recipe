@@ -54,6 +54,7 @@ route.post("/profile", async (req,res)=>{
     if(UserIfValid){
         return res.json({'Data':UserIfValid})
     }else{
+        console.log("NOT");
         return res.json({'msg':"Plaese Refresh The Page"})
     }
     // const data = await User.findById(req.session.Userid);

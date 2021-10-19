@@ -2,12 +2,12 @@ const mongoose = require('mongoose')
 
 const RecipeSchema = new mongoose.Schema({
     title:{
-        type:String,
-        required:true
+        type:String
+        // required:true
     },
     Description:{
-        type:String,
-        required:true
+        type:String
+        // required:true
     },
     Date:{
         type:Date,

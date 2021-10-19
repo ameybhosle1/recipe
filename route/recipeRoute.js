@@ -20,15 +20,16 @@ route.post("/all", async (req,res)=>{
         console.log(token.id);
         if(token.id){
             const values2 = await Recipe.find();
+            console.log(values2);
             var len = Math.ceil((values2.length)/10);
-            let {page } = req.query;
+            let { page } = req.query;
             if(!page){
                 page = 1
             }
             var size = 10;
             const skip = (page - 1) * size;
             const data = await Recipe.find({}).populate('user').sort([['Date',-1]]).limit(size).skip(skip)
-            // console.log(data);
+            console.log(data);
             var data2 = [];
             data.map((val)=>{
                 data2.push({
@@ -42,7 +43,7 @@ route.post("/all", async (req,res)=>{
             console.log(data2);
             return res.json({'Data':data2,'page':page,'len':len});
         }else{
-
+            return res.json({'DAta':"DATA NOT FOUND"})
         }
     } catch (error) {
         return res.json({"DATA":"SOMETHING WENT WRONG"})
@@ -51,50 +52,61 @@ route.post("/all", async (req,res)=>{
 
 // View 
 
-route.get("/view/:id", isSignedIn , isAuth , async(req,res)=>{
-    const id = req.params.id;
-    console.log(id);
-    await Recipe.findById(id).populate('user').then(data =>{
-        console.log(data);
-        if(data){
-            return res.json({"data":{
-                "title":data.title,
-                "description":data.Description,
-                "Date":data.Date,
-                'user':data.user.name,
-                'image':data.image
-            }})
-        }else{
-            res.json({"DATA":"SOMETHING WENT WRONG"})
-        }
-    })
+route.get("/view/:id" , async(req,res)=>{
+    const idd = req.params.id;
+    const {id} = jwt.verify(req.body.token , 'secret');
+    if(id){
+        await Recipe.findById(idd).populate('user').then(data =>{
+            console.log(data);
+            if(data){
+                return res.json({"data":{
+                    "title":data.title,
+                    "description":data.Description,
+                    "Date":data.Date,
+                    'user':data.user.name,
+                    'image':data.image
+                }})
+            }else{
+                return res.json({"DATA":"SOMETHING WENT WRONG"})
+            }
+        })
+    }else{
+        return res.json({"DATA":"SOMETHING WENT WRONG"})
+    }
 })
 
 // Add Recipe 
 
-route.get("/add",isSignedIn , isAuth ,(req,res)=>{
-    res.render("AddRecipe")
-})
+// route.get("/add",isSignedIn , isAuth ,(req,res)=>{
+//     res.render("AddRecipe")
+// })
 
 route.post("/add", upload.single('avatar') , async (req,res)=>{
-    const { title , Description} = req.body;
-    var data = Recipe({
-        title:title,
-        Description:Description
-    })
-    const user = await User.findById(req.session.Userid);
-    user.recipe.push(data._id);
-    user.save();
-    data.user = req.session.Userid;
-    data.save();
-    if(req.file){
+    console.log("IT WORKED")
+    var {id} = jwt.verify(req.body.token , 'secret')
+    if(id){
+        const { title , desc} = req.body;
+        var data = Recipe({
+            title:title,
+            Description:desc
+        })
         console.log(req.file);
-        const result = await uploadFile(req.file);
-        console.log(result);
-        data.image = result.Key;
+        const user = await User.findById(id);
+        user.recipe.push(data._id);
+        data.user = user._id;
+        user.save();
         data.save();
+        if(req.file){
+            console.log(req.file);
+            const result = await uploadFile(req.file);
+            console.log(result);
+            data.image = result.Key;
+            data.save();
+        }
+        return res.json({'msg':true});
+    }else{
+        return res.json({'msg':"SOMETHING WENT WRONG"})
     }
-    return res.redirect("/profile");
 })
 
 // Delete Recipe

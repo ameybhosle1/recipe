@@ -13,9 +13,9 @@ mongoose.connect('mongodb+srv://amey:22334@cluster0.phmdq.mongodb.net/myFirstDat
 // ADDS USER
 // function add() {
 //     var salt = bcrypt.genSaltSync(10);
-//     var hash = bcrypt.hashSync("22334", salt);
+//     var hash = bcrypt.hashSync("22334amey", salt);
 //     var dtaa = new User({
-//         name:"ASDFA",
+//         name:"amey",
 //         password:hash
 //     })
 //     dtaa.save()
@@ -25,17 +25,17 @@ mongoose.connect('mongodb+srv://amey:22334@cluster0.phmdq.mongodb.net/myFirstDat
 
 // ADD RECIPE
 
-async function ADDRecipe(){
-    var newRecipe = new Recipe({
-        title:"Rice",
-        Description:"Add RIce and Mix Well amd Cook in Cooker for about 2 0mins",
-        user:'616a821be2fbb707285f2b67'
-    })
-    var users = await User.findById('616a821be2fbb707285f2b67')
-    console.log(users);
-    users.recipe.push(newRecipe._id);
-    users.save();
-    newRecipe.save()
-}
+// async function ADDRecipe(){
+//     var newRecipe = new Recipe({
+//         title:"Biryani",
+//         Description:"Add RIce and Mix Well amd Cook in Cooker for about 2 0mins",
+//         user:'616a821be2fbb707285f2b67'
+//     })
+//     var users = await User.findById('616dd26a4503102bb8c8f12f')
+//     console.log(users);
+//     users.recipe.push(newRecipe._id);
+//     users.save();
+//     newRecipe.save()
+// }
 
-ADDRecipe()
+// ADDRecipe()
