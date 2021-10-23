@@ -22,7 +22,7 @@ exports.uploadFile = (file)=>{
 // download image to s3 
 exports.downloadImage = (file)=>{
     const downloadParams = {
-        Key : file,
+        Key : file.filename,
         Bucket:process.env.AWS_BUCKET_NAME
     }
     return s3.getObject(downloadParams).createReadStream()

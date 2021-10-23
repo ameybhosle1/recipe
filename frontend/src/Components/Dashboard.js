@@ -6,7 +6,7 @@ import Navs from "./Nav";
 import Posts from "./Posts";
 
 const Dashboard = ()=>{
-    const [posts , setPosts] = useState({});
+    const [posts , setPosts] = useState([]);
     const [currentPage , setCurrentPage] = useState(1);
     const [postsPerPage , setPostsPerPage] = useState(10);
     const indexOfLastPage = currentPage * postsPerPage;
@@ -14,15 +14,15 @@ const Dashboard = ()=>{
     useEffect(()=>{
         async function datacall(){
             var {data} = await axios.post("http://localhost:1001/recipe/all",{'token':localStorage.getItem('user')})
-            setPosts(data);
-            console.log(data);
+            setPosts(data.Data);
+            console.log(posts);
         }
         datacall()
     },[])
     return (
         <Context.Provider value={{data:posts}}>
             WELCOME TO Dashboard
-            {/* <Posts /> */}
+            <Posts />
             {/* <IndexOfPosts posts={posts}  /> */}
         </Context.Provider>
     );

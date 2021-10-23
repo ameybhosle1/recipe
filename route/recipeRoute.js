@@ -17,10 +17,10 @@ var jwt = require('jsonwebtoken')
 route.post("/all", async (req,res)=>{
     try {
         var token = jwt.verify(req.body.token , 'secret')
-        console.log(token.id);
+        // console.log(token.id);
         if(token.id){
             const values2 = await Recipe.find();
-            console.log(values2);
+            // console.log(values2);
             var len = Math.ceil((values2.length)/10);
             let { page } = req.query;
             if(!page){
@@ -29,7 +29,7 @@ route.post("/all", async (req,res)=>{
             var size = 10;
             const skip = (page - 1) * size;
             const data = await Recipe.find({}).populate('user').sort([['Date',-1]]).limit(size).skip(skip)
-            console.log(data);
+            // console.log(data);
             var data2 = [];
             data.map((val)=>{
                 data2.push({
@@ -46,13 +46,13 @@ route.post("/all", async (req,res)=>{
             return res.json({'DAta':"DATA NOT FOUND"})
         }
     } catch (error) {
-        return res.json({"DATA":"SOMETHING WENT WRONG"})
+        return res.json({"DATA":error})
     }
 })
 
 // View 
 
-route.get("/view/:id" , async(req,res)=>{
+route.post("/view/:id" , async(req,res)=>{
     const idd = req.params.id;
     const {id} = jwt.verify(req.body.token , 'secret');
     if(id){
